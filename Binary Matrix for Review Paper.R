@@ -46,7 +46,7 @@ print(binary_matrix_df)
 # Calculate gene frequency
 gene_frequency <- rowSums(binary_matrix)
 
-# Filter genes listed in 5 or more signatures
+# Filter genes listed in 10 or more signatures
 filtered_genes <- names(gene_frequency[gene_frequency >= 10])
 filtered_binary_matrix <- binary_matrix[filtered_genes, ]
 
@@ -70,67 +70,3 @@ pheatmap(filtered_binary_matrix,
          fontsize_col = 10)
 
 view(filtered_genes)
-
-
-# SCRATCH ####
-data_df <- as.data.frame(data)
-data_df[data_df == ''] <- NA
-
-all_genes <- unique(c(data_df))
-list(c(column_lists))
-
-binary_matrix <- sapply(list(c(column_lists)), function(signature) {
-  as.integer(all_genes %in% signature) })
-
-rownames(binary_matrix) <- all_genes
-colnames(binary_matrix) <- colnames(data)
-
-view(binary_matrix)
-
-r <- unique(data_df)
-r[r == ''] <- NA
-#make the binary matrix
-matrix <- as.data.frame.matrix(table(stack(data_df))) 
-
-r |>
-  pivot_longer(everything()) |>
-  drop_na() |>
-  mutate(binary=1L) |>
-  pivot_wider(names_from=value, values_from=binary, values_fill=0L)
-
-
-data_list <- as.list(data)
-GeneID <- sort(unique(unlist(data_list)))
-mat <- t(+sapply(data_list, "%in%", x = GeneID))  ## matrix output
-colnames(mat) <- GeneID
-
-data.frame(mat)
-
-tib <- as_tibble(Sample)
-tib %>% pivot_longer(everything()) %>% drop_na() %>%  mutate(binary=1L) %>%
-  pivot_wider(names_from=value, values_from=binary, values_fill=0L)
-
-# Step 1: Read your CSV file
-data <- read.csv("Data_X.csv", header = TRUE, stringsAsFactors = FALSE)
-
-# Step 2: Create a list for each column named by its header
-column_lists <- lapply(colnames(data), function(col) data[[col]])
-
-# Step 3: Assign column headers as names for the lists
-names(column_lists) <- colnames(data)
-
-# Step 4: Print the lists
-view(column_lists)
-
-# Step 1: Combine all lists into a single vector
-all_genes <- unlist(column_lists)
-
-# Step 2: Remove blank or empty entries
-all_genes <- setdiff(all_genes, c("", NA))  # Exclude empty strings and NAs
-
-# Step 3: Extract only unique genes
-unique_genes <- unique(all_genes)
-
-# Step 4: Convert the vector into a data frame
-unique_genes_df <- data.frame(Unique_Genes = unique_genes)
-
