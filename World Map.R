@@ -1,4 +1,4 @@
-install.packages(c("ggplot2", "rworldmap", "dplyr", "sf"))
+setwd("~/Desktop/Review Paper")
 
 library(ggplot2)
 library(rworldmap)
